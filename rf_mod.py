@@ -317,7 +317,7 @@ class fsk_hop_tx_flowgraph(gr.top_block):
     def __init__(self, center_freq, samp_rate, gain, fsk_deviation_hz,
                  baseband_file_name, baseband_samp_rate,
                  freq_hop_list, verbose = False,
-                 hardware_transmit_enable = True, hw_sel = 0,
+                 hardware_transmit_enable = True, hw_sel = 0, hw_gain = 0,
                  iq_file_out = False):
         gr.top_block.__init__(self)
 
@@ -345,6 +345,7 @@ class fsk_hop_tx_flowgraph(gr.top_block):
         self.baseband_samp_rate = baseband_samp_rate
         self.freq_hop_list = freq_hop_list
         self.hw_sel = hw_sel
+        self.hw_gain = hw_gain
 
         """
         r = gr.enable_realtime_scheduling()
@@ -467,7 +468,7 @@ class fsk_hop_tx_flowgraph(gr.top_block):
                 self.osmosdr_sink.set_sample_rate(samp_rate)
                 self.osmosdr_sink.set_center_freq(center_freq, 0)
                 self.osmosdr_sink.set_freq_corr(0, 0)
-                self.osmosdr_sink.set_gain(14, 0)
+                self.osmosdr_sink.set_gain(hw_gain, 0)
                 self.osmosdr_sink.set_if_gain(20, 0)
                 self.osmosdr_sink.set_bb_gain(20, 0)
                 self.osmosdr_sink.set_antenna("", 0)
@@ -485,7 +486,7 @@ class fsk_hop_tx_flowgraph(gr.top_block):
                 )
                 self.uhd_usrp_sink_0.set_samp_rate(samp_rate)
                 self.uhd_usrp_sink_0.set_center_freq(center_freq, 0)
-                self.uhd_usrp_sink_0.set_gain(0, 0)
+                self.uhd_usrp_sink_0.set_gain(hw_gain, 0)
                 self.uhd_usrp_sink_0.set_antenna('TX/RX', 0)
                 self.connect(
                     (self.blocks_multiply_tune, 0),
