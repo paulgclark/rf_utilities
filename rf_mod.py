@@ -18,6 +18,7 @@ from gnuradio import digital
 from gnuradio import eng_notation
 from gnuradio import filter
 from gnuradio.filter import firdes
+from gnuradio import uhd
 import pmt
 import math
 import osmosdr
@@ -316,7 +317,8 @@ class fsk_hop_tx_flowgraph(gr.top_block):
     def __init__(self, center_freq, samp_rate, gain, fsk_deviation_hz,
                  baseband_file_name, baseband_samp_rate,
                  freq_hop_list, verbose = False,
-                 hardware_transmit_enable = True, iq_file_out = False):
+                 hardware_transmit_enable = True, hw_sel = 0,
+                 iq_file_out = False):
         gr.top_block.__init__(self)
 
         # display the parameters used for transmit
@@ -342,6 +344,7 @@ class fsk_hop_tx_flowgraph(gr.top_block):
         self.baseband_file_name = baseband_file_name
         self.baseband_samp_rate = baseband_samp_rate
         self.freq_hop_list = freq_hop_list
+        self.hw_sel = hw_sel
 
         """
         r = gr.enable_realtime_scheduling()
@@ -458,20 +461,35 @@ class fsk_hop_tx_flowgraph(gr.top_block):
         # setup osmocom block for HackRF control
         # NEED: add control switch for USRP models
         if hardware_transmit_enable:
-            self.osmosdr_sink = osmosdr.sink(
-                args="numchan=" + str(1) + " " + "")
-            self.osmosdr_sink.set_sample_rate(samp_rate)
-            self.osmosdr_sink.set_center_freq(center_freq, 0)
-            self.osmosdr_sink.set_freq_corr(0, 0)
-            self.osmosdr_sink.set_gain(14, 0)
-            self.osmosdr_sink.set_if_gain(20, 0)
-            self.osmosdr_sink.set_bb_gain(20, 0)
-            self.osmosdr_sink.set_antenna("", 0)
-            self.osmosdr_sink.set_bandwidth(0, 0)
-            self.connect(
-                (self.blocks_multiply_tune, 0),
-                (self.osmosdr_sink, 0))
-
+            if self.hw_sel == 0:
+                self.osmosdr_sink = osmosdr.sink(
+                    args="numchan=" + str(1) + " " + "")
+                self.osmosdr_sink.set_sample_rate(samp_rate)
+                self.osmosdr_sink.set_center_freq(center_freq, 0)
+                self.osmosdr_sink.set_freq_corr(0, 0)
+                self.osmosdr_sink.set_gain(14, 0)
+                self.osmosdr_sink.set_if_gain(20, 0)
+                self.osmosdr_sink.set_bb_gain(20, 0)
+                self.osmosdr_sink.set_antenna("", 0)
+                self.osmosdr_sink.set_bandwidth(0, 0)
+                self.connect(
+                    (self.blocks_multiply_tune, 0),
+                    (self.osmosdr_sink, 0))
+            elif self.hw_sel == 1:
+                self.uhd_usrp_sink_0 = uhd.usrp_sink(
+                    ",".join(("", "")),
+                    uhd.stream_args(
+                        cpu_format="fc32",
+                        channels=range(1),
+                    ),
+                )
+                self.uhd_usrp_sink_0.set_samp_rate(samp_rate)
+                self.uhd_usrp_sink_0.set_center_freq(center_freq, 0)
+                self.uhd_usrp_sink_0.set_gain(0, 0)
+                self.uhd_usrp_sink_0.set_antenna('TX/RX', 0)
+                self.connect(
+                    (self.blocks_multiply_tune, 0),
+                    (self.uhd_usrp_sink_0, 0))
 
         # this file sink provides an IQ capture of the RF
         # being transmitted by this app; the resulting file
