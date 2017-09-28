@@ -361,6 +361,9 @@ class ook_rx_zmq(gr.top_block):
                 (self.osmosdr_source_0, 0),
                 (self.uhd_usrp_source_0, 0))
 
+        # add limeSDR using osmocom
+        #elif self.hw_sel == HW_SEL_LIME:
+
         # demodulation
         self.blocks_complex_to_mag_0 = blocks.complex_to_mag(1)
         self.blocks_add_const_vxx_0 = blocks.add_const_vff(
@@ -415,32 +418,35 @@ class ook_rx_zmq(gr.top_block):
             (self.digital_binary_slicer_fb_0, 0),
             (self.blocks_keep_one_in_n_0, 0))
 
-        # find preamble
-        self.digital_correlate_access_code_tag_bb_0 = \
-            digital.correlate_access_code_tag_bb(
-                "10101010101010101010",
+        # find preamble and apply tag
+        self.digital_correlate_access_code_xx_ts_0 = \
+            digital.correlate_access_code_bb_ts(
+                "01010101010101010101",
                 0,
-                "preamble")
+                "packet_len")
         self.connect(
             (self.blocks_keep_one_in_n_0, 0),
-            (self.digital_correlate_access_code_tag_bb_0, 0))
+            (self.digital_correlate_access_code_xx_ts_0, 0))
+
+        # pack bitstream into bytes
+        self.blocks_repack_bits_bb_0_0_0 = blocks.repack_bits_bb(
+            1,
+            8,
+            'packet_len',
+            False,
+            gr.GR_MSB_FIRST)
+        self.connect(
+            (self.digital_correlate_access_code_xx_ts_0, 0),
+            (self.blocks_repack_bits_bb_0_0_0, 0)
+        )
 
         # generate PDU
-        self.blocks_stream_to_tagged_stream_0 = \
-            blocks.stream_to_tagged_stream(
-                gr.sizeof_char,
-                1,
-                self.payload_len,
-                "preamble")
         self.blocks_tagged_stream_to_pdu_0 = \
             blocks.tagged_stream_to_pdu(
                 blocks.byte_t,
-                "preamble")
+                'packet_len')
         self.connect(
-            (self.digital_correlate_access_code_tag_bb_0, 0),
-            (self.blocks_stream_to_tagged_stream_0, 0))
-        self.connect(
-            (self.blocks_stream_to_tagged_stream_0, 0),
+            (self.blocks_repack_bits_bb_0_0_0, 0),
             (self.blocks_tagged_stream_to_pdu_0, 0))
 
         # add ZeroMQ sink to get data out of flowgraph

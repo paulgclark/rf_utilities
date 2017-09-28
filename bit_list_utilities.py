@@ -136,11 +136,14 @@ def bitsToDec(bitList, invert = False, reverse = False):
 # the integer value passed; the input integer must be greater than
 # or equal to zero and less than 2**(len)
 def decToPaddedBits(intVal, numBits):
-    if intVal > (2**(numBits)-1):
-        print "WARNING: decToBits() passed too few bits to render integer",
+    # make sure the input value is an int
+    val = int(intVal)
+    #if int(intVal) > (2**(numBits)-1):
+    if val.bit_length() > numBits:
+        print "WARNING: decToBits() passed too few bits ({}) to render integer: {}".format(numBits, val),
         return numBits*[LOGIC_X]
     # build minimum bit count equivalent
-    bits = [int(digit) for digit in bin(intVal)[2:]]
+    bits = [int(digit) for digit in bin(val)[2:]]
     # now pad the front end with zeros as needed
     padCount = numBits - len(bits)
     bits = padCount*[0] + bits
@@ -190,6 +193,18 @@ def bitsToNibble(bits, reverse = False):
     if bits == [1, 1, 1, 0]: nibble = 'E'
     if bits == [1, 1, 1, 1]: nibble = 'F'
     return nibble
+
+
+# converts list of input bits to a list of bytes
+def bit_list_to_byte_list(bits):
+    if len(bits) % 8 != 0:
+        print "WARNING: incomplete byte detected in input to bit_list_to_byte_list"
+    byte_list = []
+    for i in xrange(0, len(bits), 8):
+        bits_in_byte = bits[i:i+8]
+        byte = bitsToDec(bits_in_byte)
+        byte_list.append(byte)
+    return byte_list
 
 
 # when passed a bit list that is eight bits in length, this function

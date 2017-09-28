@@ -3,6 +3,8 @@ import array
 import time
 import struct
 import numpy as np
+import pmt
+import sys
 
 class zmq_pull_socket():
     def __init__(self, tcp_str, verbose=0):
@@ -18,7 +20,11 @@ class zmq_pull_socket():
     
     def poll_message(self):
         msg = self.receiver.recv()
-        return msg
+        # this is a binary string, convert it to a list of ints
+        byte_list = []
+        for byte in msg:
+            byte_list.append(ord(byte))
+        return byte_list
 
     # incomplete attempt to optimize data flow by
     # sending bytes instead of floats; flowgraph
