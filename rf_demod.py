@@ -274,7 +274,7 @@ class ook_rx_zmq(gr.top_block):
 
         gr.top_block.__init__(self)
 
-        if verbose > 0:
+        if True: #verbose > 0:
             print "\nFlowgraph Properties:"
             print "  Center Frequency: {} MHz".format(center_freq/1000000.0)
             print "  Tune Frequency:   {} MHz".format(freq/1000000.0)
@@ -329,7 +329,7 @@ class ook_rx_zmq(gr.top_block):
                 (self.freq_xlating_fir_filter_xxx_0, 0))
         elif hw_sel == HW_SEL_HACKRF:
             self.osmosdr_source_0 = osmosdr.source(
-                args="numchan=" + str(1) + " " + '')
+                args="numchan=" + str(1) + " " + 'hackrf=0')
             self.osmosdr_source_0.set_sample_rate(samp_rate)
             self.osmosdr_source_0.set_center_freq(center_freq, 0)
             self.osmosdr_source_0.set_freq_corr(0, 0)
