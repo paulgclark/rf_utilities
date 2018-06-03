@@ -6,6 +6,7 @@
 # note: these functions have not been optimized for performance,
 # but are instead implemented for maximal clarity and readability
 
+import sys
 from collections import deque
 LOGIC_X = "X"
 
@@ -282,3 +283,8 @@ def hexShortToDec(byteLowString, byteHighString, reverse = False):
     decimalWord = 256*256*decimalHigh + decimalLow
     return decimalWord
 
+# prints a list of byte values as ASCII
+def print_bytes_as_ascii(byte_list):
+    for byte in byte_list:
+        sys.stdout.write(chr(byte))
+    print ""
