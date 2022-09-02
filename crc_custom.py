@@ -275,12 +275,12 @@ class CrcDefinition:
 
         # display the results of the most successful attempts
         if verbose:
-            print "Successes: {} at index = {}".format(max(successCount), indexOfBest)
-            print masterSuccessList
+            print("Successes: {} at index = {}".format(max(successCount), indexOfBest))
+            print(masterSuccessList)
             
         # return a CRC object containing the parameters of the most successful
         # need to acess the solution space with the index and get the values
-        print solutionSpace[indexOfBest]
+        print(solutionSpace[indexOfBest])
         return 0
 
 
@@ -352,15 +352,15 @@ def crcCompute(payload, crcPoly, inputBitOrder, initVal, reverseFinal,
 
     # print out inputs before proceeding
     if False:
-        print "payload length: {}".format(len(payload))
-        print "crcPoly: {}".format(crcPoly)
-        print "inputBitOrder: " + str(inputBitOrder)
-        print "initVal: " + str(initVal)
-        print "reverseFinal: " + str(reverseFinal)
-        print "finalXOR: {}".format(finalXOR)
-        print "padType: " + str(padType)
-        print "padCount: " + str(padCount)
-        print "padVal: " + str(padVal)
+        print("payload length: {}".format(len(payload)))
+        print("crcPoly: {}".format(crcPoly))
+        print("inputBitOrder: " + str(inputBitOrder))
+        print("initVal: " + str(initVal))
+        print("reverseFinal: " + str(reverseFinal))
+        print("finalXOR: {}".format(finalXOR))
+        print("padType: " + str(padType))
+        print("padCount: " + str(padCount))
+        print("padVal: " + str(padVal))
         
     # pad the packet as instructed
     payloadPad = payload[:];
@@ -397,17 +397,17 @@ def crcCompute(payload, crcPoly, inputBitOrder, initVal, reverseFinal,
     for i in range(len(crcPoly) - 1):
         payloadIn.append(initVal) # CRCs can have different initial values
 
-    #print "range i and j and len(payloadIn):"
-    #print range(len(payload))
-    #print range(len(crcPoly))
-    #print len(payloadIn) #print payload
-    #print payloadIn
+    #print("range i and j and len(payloadIn):")
+    #print(range(len(payload)))
+    #print(range(len(crcPoly)))
+    #print(len(payloadIn) #print payload)
+    #print(payloadIn)
 
     for i in range(len(payload)):
         if (payloadIn[i] == 1):
             for j in range(len(crcPoly)):
                 payloadIn[i+j] = (payloadIn[i+j]+crcPoly[j]) % 2
-        #print payloadIn
+        #print(payloadIn)
 
     # crc value is the remainder which is stored in the final bits 
     # of the computation
@@ -484,8 +484,8 @@ def checksumCompute(dataList,
                     initSum = 0):
 
     if (dataStop - dataStart + 1) % 8 != 0:
-        print "WARNING: Input data contains incomplete byte."
-        print "         Length of list should be evenly divisible by 8."
+        print("WARNING: Input data contains incomplete byte.")
+        print("         Length of list should be evenly divisible by 8.")
     sum = initSum
     for i in xrange(dataStart, dataStop, 8):
         bitsInByte = dataList[i:i+8]
@@ -501,6 +501,6 @@ def checksumCompute(dataList,
     modVal = 2**numOutputBits
     sum = sum % modVal
     if dataReverse == CRC_REVERSE_BYTES:
-        print "Warning: arithmetic checksum byte swap feature not yet implemented"
+        print("Warning: arithmetic checksum byte swap feature not yet implemented")
     return sum
 

@@ -26,28 +26,28 @@ class ntsc_fm_demod_flowgraph(gr.top_block):
         gr.top_block.__init__(self)
 
         if verbose > 0:
-            print "\nFlowgraph Properties:"
-            print "  Center Frequency: {} MHz".format(center_freq/1000000.0)
-            print "  Tune Frequency:   {} MHz".format(freq/1000000.0)
-            print "  IQ Sample Rate (in): {} MHz".format(samp_rate/1000000.0)
-            print "  BB Sample Rate (out): {} MHz".format(bb_samp_rate/1000000.0)
-            print "  FM Deviation: {} MHz".format(fm_deviation/1000000.0)
-            print "  Channel Width: {} MHz".format(channel_width/1000000.0)
-            print "  Transition Width: {} MHz".format(transition_width/1000000.0)
-            print "  BB LPF cutoff: {} MHz".format(bb_lpf_cutoff/1000000.0)
-            print "  BB LPF transition: {} MHz".format(bb_lpf_transition/1000000.0)
+            print("\nFlowgraph Properties:")
+            print("  Center Frequency: {} MHz".format(center_freq/1000000.0))
+            print("  Tune Frequency:   {} MHz".format(freq/1000000.0))
+            print("  IQ Sample Rate (in): {} MHz".format(samp_rate/1000000.0))
+            print("  BB Sample Rate (out): {} MHz".format(bb_samp_rate/1000000.0))
+            print("  FM Deviation: {} MHz".format(fm_deviation/1000000.0))
+            print("  Channel Width: {} MHz".format(channel_width/1000000.0))
+            print("  Transition Width: {} MHz".format(transition_width/1000000.0))
+            print("  BB LPF cutoff: {} MHz".format(bb_lpf_cutoff/1000000.0))
+            print("  BB LPF transition: {} MHz".format(bb_lpf_transition/1000000.0))
             if hw_sel == 0:
-                print "  SDR: HackRF"
+                print("  SDR: HackRF")
             elif hw_sel == 1:
-                print "  SDR: USRP"
-            print "  FIFO Name: {}".format(fifo_name)
-            print "  Repeat: {}".format(repeat)
-            print "  IQ File Name: {}".format(iq_file_name)
+                print("  SDR: USRP")
+            print("  FIFO Name: {}".format(fifo_name))
+            print("  Repeat: {}".format(repeat))
+            print("  IQ File Name: {}".format(iq_file_name))
 
         # start by dumping baseband into a file and viewing in grc
 
         if verbose > 0:
-            print "Entering NTSC Demodulator..."
+            print("Entering NTSC Demodulator...")
 
         # variables
         self.center_freq = center_freq
@@ -80,7 +80,7 @@ class ntsc_fm_demod_flowgraph(gr.top_block):
         # if we were not passed a file name, use the osmocom source
         if self.iq_file_name == "":
             if verbose > 0:
-                print "Using SDR as input..."
+                print("Using SDR as input...")
 
             if self.hw_sel == 0:
                 self.osmosdr_source_0 = osmosdr.source(
@@ -112,7 +112,7 @@ class ntsc_fm_demod_flowgraph(gr.top_block):
         # otherwise, use a file source with throttle
         else:
             if verbose > 0:
-                print "Using {} as input...".format(iq_file_name)
+                print("Using {} as input...".format(iq_file_name))
             self.blocks_file_source_0 = blocks.file_source(
                 gr.sizeof_gr_complex * 1,
                 iq_file_name,
@@ -268,24 +268,24 @@ class ntsc_fm_demod_flowgraph_fxfir(gr.top_block):
         gr.top_block.__init__(self)
 
         if verbose > 0:
-            print "\nFlowgraph Properties:"
-            print "  Center Frequency: {} MHz".format(center_freq/1000000.0)
-            print "  Tune Frequency:   {} MHz".format(freq/1000000.0)
-            print "  IQ Sample Rate (in): {} MHz".format(samp_rate/1000000.0)
-            print "  BB Sample Rate (out): {} MHz".format(bb_samp_rate/1000000.0)
-            print "  FM Deviation: {} MHz".format(fm_deviation/1000000.0)
-            print "  Channel Width: {} MHz".format(channel_width/1000000.0)
-            print "  Transition Width: {} MHz".format(transition_width/1000000.0)
-            print "  BB LPF cutoff: {} MHz".format(bb_lpf_cutoff/1000000.0)
-            print "  BB LPF transition: {} MHz".format(bb_lpf_transition/1000000.0)
-            print "  FIFO Name: {}".format(fifo_name)
-            print "  Repeat: {}".format(repeat)
-            print "  IQ File Name: {}".format(iq_file_name)
+            print("\nFlowgraph Properties:")
+            print("  Center Frequency: {} MHz".format(center_freq/1000000.0))
+            print("  Tune Frequency:   {} MHz".format(freq/1000000.0))
+            print("  IQ Sample Rate (in): {} MHz".format(samp_rate/1000000.0))
+            print("  BB Sample Rate (out): {} MHz".format(bb_samp_rate/1000000.0))
+            print("  FM Deviation: {} MHz".format(fm_deviation/1000000.0))
+            print("  Channel Width: {} MHz".format(channel_width/1000000.0))
+            print("  Transition Width: {} MHz".format(transition_width/1000000.0))
+            print("  BB LPF cutoff: {} MHz".format(bb_lpf_cutoff/1000000.0))
+            print("  BB LPF transition: {} MHz".format(bb_lpf_transition/1000000.0))
+            print("  FIFO Name: {}".format(fifo_name))
+            print("  Repeat: {}".format(repeat))
+            print("  IQ File Name: {}".format(iq_file_name))
 
         # start by dumping baseband into a file and viewing in grc
 
         if verbose > 0:
-            print "Entering NTSC Demodulator..."
+            print("Entering NTSC Demodulator...")
 
         # variables
         self.center_freq = center_freq
@@ -317,7 +317,7 @@ class ntsc_fm_demod_flowgraph_fxfir(gr.top_block):
         # if we were not passed a file name, use the osmocom source
         if self.iq_file_name == "":
             if verbose > 0:
-                print "Using SDR as input..."
+                print("Using SDR as input...")
             self.osmosdr_source_0 = osmosdr.source(
                 args="numchan=" + str(1) + " " + '')
             self.osmosdr_source_0.set_sample_rate(samp_rate)
@@ -334,7 +334,7 @@ class ntsc_fm_demod_flowgraph_fxfir(gr.top_block):
         # otherwise, use a file source with throttle
         else:
             if verbose > 0:
-                print "Using {} as input...".format(iq_file_name)
+                print("Using {} as input...".format(iq_file_name))
             self.blocks_file_source_0 = blocks.file_source(
                 gr.sizeof_gr_complex * 1,
                 iq_file_name,

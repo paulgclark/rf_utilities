@@ -37,12 +37,12 @@ def modulator(verbose, modulation, center_freq, frequency, samp_rate,
               ook_gain, fsk_deviation_hz, channel_width, 
               basebandFileName, basebandSampleRate, repeat, timeBetweenTx):
     if verbose:
-        print "Entering modulator function"
+        print("Entering modulator function")
 
     # select between the major modulation types
     if modulation == MOD_OOK:
         if verbose:
-            print "Instantiating OOK flowgraph..."
+            print("Instantiating OOK flowgraph...")
         flowgraphObject = ook_tx_flowgraph(center_freq = center_freq,
                                            freq = frequency,
                                            samp_rate = samp_rate,
@@ -54,7 +54,7 @@ def modulator(verbose, modulation, center_freq, frequency, samp_rate,
         flowgraphObject.run()
     elif modulation == MOD_FSK:
         if verbose:
-            print "Instantiating FSK flowgraph..."
+            print("Instantiating FSK flowgraph...")
         flowgraphObject = fsk_tx_flowgraph(center_freq = center_freq,
                                            freq = frequency,
                                            samp_rate = samp_rate,
@@ -66,7 +66,7 @@ def modulator(verbose, modulation, center_freq, frequency, samp_rate,
         flowgraphObject.run()
     elif modulation == MOD_DPSK:
         if verbose:
-            print "Instantiating DPSK flowgraph..."
+            print("Instantiating DPSK flowgraph...")
         flowgraphObject = dpsk_tx_flowgraph()
         flowgraphObject.run()
 
@@ -127,7 +127,7 @@ class top_block_simple(gr.top_block):
 
         # baseband and select values must be the same
         if len(bb_list) != len(hop_select_list):
-            print "Fatal Error: hop select list must be same length as baseband list"
+            print("Fatal Error: hop select list must be same length as baseband list")
             exit(1)
         # create a vector entry of the bb bits and corresponding enables
         # vector_sample = numpy.array([b'\x00', 0, 0, 0])
@@ -151,7 +151,7 @@ class top_block_simple(gr.top_block):
                 vector_sample[2] = b'\x00'
                 vector_sample[3] = b'\x01'
             else:
-                print "Fatal Error: hop select out of range; must be 0-2"
+                print("Fatal Error: hop select out of range; must be 0-2")
                 exit(1)
 
             # vector_pmt = pmt.to_pmt(vector_sample)
@@ -171,7 +171,7 @@ class top_block_simple(gr.top_block):
             # vector_str = gr.message_from_string(vector_sample)
             #self.source_queue_v.insert_tail(vector_str)
             #vector_string = pmt.write_string(vector_pmt)
-            #print vector_string
+            #print(vector_string)
             #message = gr.message_from_string(vector_string)
             #self.blocks_message_source_0_msgq_in.insert_tail(message)
 
@@ -276,7 +276,7 @@ class top_block(gr.top_block):
 
         # baseband and select values must be the same
         if len(bb_list) != len(hop_select_list):
-            print "Fatal Error: hop select list must be same length as baseband list"
+            print("Fatal Error: hop select list must be same length as baseband list")
             exit(1)
         # create a vector entry of the bb bits and corresponding enables
         # vector_sample = numpy.array([b'\x00', 0, 0, 0])
@@ -300,7 +300,7 @@ class top_block(gr.top_block):
                 vector_sample[2] = b'\x00'
                 vector_sample[3] = b'\x01'
             else:
-                print "Fatal Error: hop select out of range; must be 0-2"
+                print("Fatal Error: hop select out of range; must be 0-2")
                 exit(1)
 
             # vector_pmt = pmt.to_pmt(vector_sample)
@@ -325,16 +325,16 @@ class fsk_hop_tx_flowgraph(gr.top_block):
 
         # display the parameters used for transmit
         if True: #verbose:
-            print "Baseband File Name: {}".format(baseband_file_name)
-            print "Baseband Sample Rate: {}".format(baseband_samp_rate)
-            print "SDR Center Freq: {}".format(center_freq)
-            print "SDR Sample Rate: {}".format(samp_rate)
-            print "Flowgraph Gain: {}".format(gain)
-            print "GFSK deviation: {}".format(fsk_deviation_hz)
-            print "Freq 0-2: {}".format(freq_hop_list)
-            print "Verbose: {}".format(verbose)
-            print "Hardware TX Enable: {}".format(hardware_transmit_enable)
-            print "IQ to File: {}".format(iq_file_out)
+            print("Baseband File Name: {}".format(baseband_file_name))
+            print("Baseband Sample Rate: {}".format(baseband_samp_rate))
+            print("SDR Center Freq: {}".format(center_freq))
+            print("SDR Sample Rate: {}".format(samp_rate))
+            print("Flowgraph Gain: {}".format(gain))
+            print("GFSK deviation: {}".format(fsk_deviation_hz))
+            print("Freq 0-2: {}".format(freq_hop_list))
+            print("Verbose: {}".format(verbose))
+            print("Hardware TX Enable: {}".format(hardware_transmit_enable))
+            print("IQ to File: {}".format(iq_file_out))
 
         ##################################################
         # Variables
@@ -352,7 +352,7 @@ class fsk_hop_tx_flowgraph(gr.top_block):
         """
         r = gr.enable_realtime_scheduling()
         if r == gr.RT_OK:
-            print "Note: Realtime scheduling enabled"
+            print("Note: Realtime scheduling enabled")
         """
         # self.cutoff_freq = channel_width/2
         ##################################################
@@ -533,7 +533,7 @@ class fsk_hop_tx_flowgraph(gr.top_block):
             elif bit == 0:
                 message_str += b'\x00'
             else:
-                print "Error passing data to flowgraph. Exiting..."
+                print("Error passing data to flowgraph. Exiting...")
                 exit(1)
             self.source_queue.handle(gr.message_from_string(message_str))
             message_str = ""
@@ -546,7 +546,7 @@ class fsk_hop_tx_flowgraph(gr.top_block):
 
         # baseband and select values must be the same
         if len(bb_list) != len(hop_select_list):
-            print "Fatal Error: hop select list must be same length as baseband list"
+            print("Fatal Error: hop select list must be same length as baseband list")
             exit(1)
         # create a vector entry of the bb bits and corresponding enables
         #vector_sample = numpy.array([b'\x00', 0, 0, 0])
@@ -570,7 +570,7 @@ class fsk_hop_tx_flowgraph(gr.top_block):
                 vector_sample[2] = b'\x00'
                 vector_sample[3] = b'\x01'
             else:
-                print "Fatal Error: hop select out of range; must be 0-2"
+                print("Fatal Error: hop select out of range; must be 0-2")
                 exit(1)
 
             #vector_pmt = pmt.to_pmt(vector_sample)
@@ -627,7 +627,7 @@ class ook_tx_flowgraph(gr.top_block):
         
         # if directed, we also dump the output IQ data into a file
         #if len(dig_out_filename) > 0:
-            #print "Outputing IQ to waveform to " + dig_out_filename
+            #print("Outputing IQ to waveform to " + dig_out_filename)
             #self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_char*1, dig_out_filename, False)
             #self.blocks_file_sink_0.set_unbuffered(False)
 
@@ -684,7 +684,7 @@ class fsk_tx_flowgraph(gr.top_block):
         
         # if directed, we also dump the output IQ data into a file
         #if len(dig_out_filename) > 0:
-            #print "Outputing IQ to waveform to " + dig_out_filename
+            #print("Outputing IQ to waveform to " + dig_out_filename)
             #self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_char*1, dig_out_filename, False)
             #self.blocks_file_sink_0.set_unbuffered(False)
 

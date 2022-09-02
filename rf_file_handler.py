@@ -20,7 +20,7 @@ debug = False
 def fileNameTextToFloat(valStr, unitStr):
     # if there's a 'p' character, then we have to deal with decimal vals
     if 'p' in valStr:
-        print "decimal value found"
+        print("decimal value found")
         regex = re.compile(r"([0-9]+)p([0-9]+)")
         wholeVal = regex.findall(valStr)[0][0]
         decimalVal = regex.findall(valStr)[0][1]
@@ -69,10 +69,10 @@ class iqFileObject():
             sampUnitStr = paramList[0][3]
 
             if debug:
-                print centerValStr
-                print centerUnitStr
-                print sampValStr
-                print sampUnitStr
+                print(centerValStr)
+                print(centerUnitStr)
+                print(sampValStr)
+                print(sampUnitStr)
 
             # compute center frequency and sample rate
             self.centerFreq = fileNameTextToFloat(centerValStr, centerUnitStr)
@@ -84,9 +84,9 @@ class iqFileObject():
             self.prefix = justName[0:len(justName)-nonPrefixLen]
              
             if debug:
-                print self.centerFreq
-                print self.sampRate
-                print self.prefix
+                print(self.centerFreq)
+                print(self.sampRate)
+                print(self.prefix)
 
     def fileName(self):
         tempStr = self.prefix

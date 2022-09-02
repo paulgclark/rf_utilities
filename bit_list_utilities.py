@@ -58,7 +58,7 @@ def rotateBitList(bitList, rotate, invert = True):
 # should add the ability to handle lengths other than 16
 def byteReverse(bitList):
     if len(bitList) != 16:
-        print "WARNING: input bit list not evenly divisible by 8"
+        print("WARNING: input bit list not evenly divisible by 8")
         return 16*[LOGIC_X]
     else:
         return bitList[8:16] + bitList[0:8]
@@ -84,14 +84,14 @@ def extractDisjointedBits(targetList, indexList):
 # Note: newData and indexList must be the same length
 def writeDisjointBits(targetList, newData, indexList):
     if len(newData) != len(indexList):
-        print "ERROR: attempting to write bits to list with",
-        print "improper indexList length. Exiting..." 
+        print("ERROR: attempting to write bits to list with", end=' ')
+        print("improper indexList length. Exiting...")
         exit(1)
 
     l = len(targetList)
     if max(indexList) >= l:
-        print "ERROR: index in list out of range, write will",
-        print "not be attempted."
+        print("ERROR: index in list out of range, write will", end=' ')
+        print("not be attempted.")
         return 0
 
     for index, bit in zip(indexList, newData):
@@ -141,7 +141,7 @@ def decToPaddedBits(intVal, numBits):
     val = int(intVal)
     #if int(intVal) > (2**(numBits)-1):
     if val.bit_length() > numBits:
-        print "WARNING: decToBits() passed too few bits ({}) to render integer: {}".format(numBits, val),
+        print("WARNING: decToBits() passed too few bits ({}) to render integer: {}".format(numBits, val), end=' ')
         return numBits*[LOGIC_X]
     # build minimum bit count equivalent
     bits = [int(digit) for digit in bin(val)[2:]]
@@ -199,7 +199,7 @@ def bitsToNibble(bits, reverse = False):
 # converts list of input bits to a list of bytes
 def bit_list_to_byte_list(bits):
     if len(bits) % 8 != 0:
-        print "WARNING: incomplete byte detected in input to bit_list_to_byte_list"
+        print("WARNING: incomplete byte detected in input to bit_list_to_byte_list")
     byte_list = []
     for i in xrange(0, len(bits), 8):
         bits_in_byte = bits[i:i+8]
@@ -287,4 +287,4 @@ def hexShortToDec(byteLowString, byteHighString, reverse = False):
 def print_bytes_as_ascii(byte_list):
     for byte in byte_list:
         sys.stdout.write(chr(byte))
-    print ""
+    print("")
